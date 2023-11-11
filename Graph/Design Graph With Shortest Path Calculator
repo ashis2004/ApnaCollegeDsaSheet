@@ -1,0 +1,49 @@
+class Graph {
+    //To store adjacent nodes of a node -> adjList
+    //index in List -> node , Pair(0) -> adjacentNode , Pair[1]->cost(from this node to adjacent node)
+    List<List<Pair<Integer, Integer>>> adj_list;
+public Graph(int n, int[][] edges) {
+    adj_list = new ArrayList<>();
+    for (int i = 0; i < n; i++)
+        adj_list.add(new ArrayList<>());
+    for (int[] e : edges)
+        adj_list.get(e[0]).add(new Pair<>(e[1], e[2]));
+}
+    //adding and edge -> Just add the adjacent Node, and its distance to the current node in our adjList
+    public void addEdge(int[] edge) {
+        adj_list.get(edge[0]).add(new Pair<>(edge[1],edge[2]));
+    }
+    
+    public int shortestPath(int node1, int node2) {
+        int n = adj_list.size();  //number of nodes in graph
+        PriorityQueue<Pair<Integer,Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.getKey()));   //key -> distance    //value -> that Node
+        //This Queue will always remove first the element having less distance
+    int[] dist = new int[n]; //index-> node , value-> distance from node1
+    Arrays.fill(dist,Integer.MAX_VALUE);
+    dist[node1] = 0;
+    pq.add(new Pair<>(0,node1));
+
+    while(!pq.isEmpty()){
+        var pair = pq.remove();
+        int d = pair.getKey();
+        int node = pair.getValue();
+        if(node==node2) return d;
+        if(d>dist[node]) continue;
+        for(Pair<Integer,Integer> neighbor : adj_list.get(node)) {
+            int newDist = d + neighbor.getValue();
+            if(newDist < dist[neighbor.getKey()]) {
+                dist[neighbor.getKey()] = newDist;
+                pq.add(new Pair<>(newDist,neighbor.getKey()));
+            }
+        }
+    }
+    return -1;
+    }
+}
+
+/**
+ * Your Graph object will be instantiated and called as such:
+ * Graph obj = new Graph(n, edges);
+ * obj.addEdge(edge);
+ * int param_2 = obj.shortestPath(node1,node2);
+ */
