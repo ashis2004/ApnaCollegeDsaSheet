@@ -1,0 +1,75 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+
+class FoodRatings {
+
+    // Map to store foods by cuisine, ordered by ratings
+    private Map<String, PriorityQueue<Food>> cuisineMap;
+
+    // Map to quickly locate a food by its name
+    private Map<String, Food> foodMap;
+
+    // Constructor to initialize the system
+    public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
+        cuisineMap = new HashMap<>();
+        foodMap = new HashMap<>();
+
+        // Populate the maps with initial food data
+        for (int i = 0; i < foods.length; i++) {
+            Food food = new Food(foods[i], cuisines[i], ratings[i]);
+            cuisineMap.putIfAbsent(cuisines[i], new PriorityQueue<>());
+            cuisineMap.get(cuisines[i]).add(food);
+            foodMap.put(foods[i], food);
+        }
+    }
+
+    // Method to change the rating of a specific food
+    public void changeRating(String food, int newRating) {
+        if (foodMap.containsKey(food)) {
+            Food f = foodMap.get(food);
+
+            // Remove the food from its current cuisine's priority queue
+            cuisineMap.get(f.cuisine).remove(f);
+
+            // Update the rating of the food
+            f.rating = newRating;
+
+            // Add the food back to its cuisine's priority queue with the updated rating
+            cuisineMap.get(f.cuisine).add(f);
+        }
+    }
+
+    // Method to return the name of the highest-rated food for a given cuisine
+    public String highestRated(String cuisine) {
+        if (cuisineMap.containsKey(cuisine) && !cuisineMap.get(cuisine).isEmpty()) {
+            // Return the name of the highest-rated food in the specified cuisine
+            return cuisineMap.get(cuisine).peek().name;
+        }
+        // Return null if the cuisine is not present or has no foods
+        return null;
+    }
+
+    // Inner class to represent a food item
+    private static class Food implements Comparable<Food> {
+        String name;
+        String cuisine;
+        int rating;
+
+        // Constructor for initializing a food item
+        public Food(String name, String cuisine, int rating) {
+            this.name = name;
+            this.cuisine = cuisine;
+            this.rating = rating;
+        }
+
+        // Compare food items based on ratings and lexicographical order of names
+        @Override
+        public int compareTo(Food other) {
+            if (this.rating != other.rating) {
+                return Integer.compare(other.rating, this.rating);
+            }
+            return this.name.compareTo(other.name);
+        }
+    }
+}
