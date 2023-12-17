@@ -1,0 +1,13 @@
+class Solution {
+    public String addStrings(String num1, String num2) {
+        // Convert the input strings to BigInteger objects
+        java.math.BigInteger a = new java.math.BigInteger(num1);
+        java.math.BigInteger b = new java.math.BigInteger(num2);
+
+        // Perform addition using the add method of BigInteger
+        a = a.add(b);
+
+        // Convert the result back to a string and return it
+        return a.toString();
+    }
+}
