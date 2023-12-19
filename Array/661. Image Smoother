@@ -1,0 +1,42 @@
+class Solution {
+    public int[][] imageSmoother(int[][] img) {
+        int rows = img.length;
+        int cols = img[0].length;
+        int[][] res = new int[rows][cols];
+
+        // Iterate through each cell in the input matrix
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Calculate the average of the surrounding cells and update the result matrix
+                res[i][j] = getAverage(img, i, j);
+            }
+        }
+
+        return res;
+    }
+
+    // Helper function to calculate the average of surrounding cells for a given cell
+    private int getAverage(int[][] img, int row, int col) {
+        int sum = 0;
+        int count = 0;
+
+        // Iterate through the surrounding cells (3x3 neighborhood)
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = col - 1; j <= col + 1; j++) {
+                // Check if the cell is a valid cell in the matrix
+                if (isValidCell(img, i, j)) {
+                    sum += img[i][j];
+                    count++;
+                }
+            }
+        }
+
+        // Calculate and return the average value
+        return sum / count;
+    }
+
+    // Helper function to check if a cell is within the bounds of the matrix
+    private boolean isValidCell(int[][] img, int row, int col) {
+        return row >= 0 && row < img.length && col >= 0 && col < img[0].length;
+    }
+}
