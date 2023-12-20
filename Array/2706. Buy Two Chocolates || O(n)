@@ -1,0 +1,26 @@
+class Solution {
+    public int buyChoco(int[] prices, int money) {
+        // Initialize variables to keep track of the two minimum chocolate prices
+        int firstMinCost = Integer.MAX_VALUE;
+        int secondMinCost = Integer.MAX_VALUE;
+
+        // Iterate through each chocolate price in the array
+        for (int p : prices) {
+            // Check if the current price is less than the current firstMinCost
+            if (p < firstMinCost) {
+                // If true, update both firstMinCost and secondMinCost
+                secondMinCost = firstMinCost;
+                firstMinCost = p;
+            } else {
+                // If false, check if the current price is less than the current secondMinCost
+                secondMinCost = Math.min(secondMinCost, p);
+            }
+        }
+
+        // Calculate the amount of money left after buying the two chocolates
+        int leftover = money - (firstMinCost + secondMinCost);
+
+        // Return the remaining money if it's non-negative, otherwise return the original amount of money
+        return leftover >= 0 ? leftover : money;        
+    }
+}
