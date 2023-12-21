@@ -1,0 +1,14 @@
+class Solution {
+    // Method to calculate the sum of pairs from a sorted array
+    public int arrayPairSum(int[] nums) {
+        
+        Arrays.sort(nums); // Sorting the array in ascending order (Time complexity: O(n log n))
+        
+        int sum = 0;
+        // Loop through the sorted array, skipping every second element
+        for (int i = nums.length - 2; i >= 0; i = i - 2) { // Iterating through the sorted array (Time complexity: O(n))
+            sum += nums[i]; // Accumulating the sum of the selected pairs
+        }
+        return sum; // Returning the final sum of pairs
+    }
+}
